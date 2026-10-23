@@ -50,7 +50,7 @@ services:
             keepalive_pool_size: 256
             ssl: false
 
-  - name: payment-service
+  - name: payment-service-api
     url: http://envoy-service.egress-system.svc.cluster.local:3128/test-api
     retries: 5
     connect_timeout: 60000
