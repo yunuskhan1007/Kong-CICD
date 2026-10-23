@@ -1,0 +1,43 @@
+name: Kong Konnect GitOps Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'kong.yaml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'kong.yaml'
+
+jobs:
+  kong-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup decK CLI
+        uses: kong/setup-deck@v1
+        with:
+          version: latest
+
+      - name: Step 1 - Validate Configuration
+        run: deck gateway validate kong.yaml
+
+      - name: Step 2 - Diff Configuration against Konnect
+        env:
+          DECK_KONNECT_TOKEN: ${{ secrets.DECK_KONNECT_TOKEN }}
+          DECK_KONNECT_CONTROL_PLANE_ID: ${{ secrets.DECK_KONNECT_CONTROL_PLANE_ID }}
+          DECK_KONNECT_ADDR: ${{ secrets.DECK_KONNECT_ADDR }}
+        run: deck gateway diff kong.yaml
+
+      - name: Step 3 - Sync Configuration (Push to Konnect)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          DECK_KONNECT_TOKEN: ${{ secrets.DECK_KONNECT_TOKEN }}
+          DECK_KONNECT_CONTROL_PLANE_ID: ${{ secrets.DECK_KONNECT_CONTROL_PLANE_ID }}
+          DECK_KONNECT_ADDR: ${{ secrets.DECK_KONNECT_ADDR }}
+        run: deck gateway sync kong.yaml
