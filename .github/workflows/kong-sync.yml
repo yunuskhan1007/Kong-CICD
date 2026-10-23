@@ -24,14 +24,8 @@ jobs:
         with:
           version: latest
 
-      - name: Step 1 - Validate Configuration
-        env:
-          DECK_KONNECT_TOKEN: ${{ secrets.DECK_KONNECT_TOKEN }}
-          DECK_KONNECT_CONTROL_PLANE_ID: ${{ secrets.DECK_KONNECT_CONTROL_PLANE_ID }}
-          DECK_KONNECT_ADDR: ${{ secrets.DECK_KONNECT_ADDR }}
-          CONSUMER_API_KEY: ${{ secrets.CONSUMER_API_KEY }}
-          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-        run: deck gateway validate kong.yaml
+      - name: Step 1 - Validate Configuration Locally
+        run: deck file validate kong.yaml
 
       - name: Step 2 - Diff Configuration against Konnect
         env:
