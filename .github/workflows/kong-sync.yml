@@ -31,10 +31,7 @@ jobs:
           DECK_KONNECT_ADDR: ${{ secrets.DECK_KONNECT_ADDR }}
           CONSUMER_API_KEY: ${{ secrets.CONSUMER_API_KEY }}
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-        run: |
-          deck gateway validate kong.yaml \
-            --konnect-token ${{ secrets.DECK_KONNECT_TOKEN }} \
-            --konnect-control-plane-id ${{ secrets.DECK_KONNECT_CONTROL_PLANE_ID }}
+        run: deck gateway validate kong.yaml
 
       - name: Step 2 - Diff Configuration against Konnect
         env:
@@ -43,10 +40,7 @@ jobs:
           DECK_KONNECT_ADDR: ${{ secrets.DECK_KONNECT_ADDR }}
           CONSUMER_API_KEY: ${{ secrets.CONSUMER_API_KEY }}
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-        run: |
-          deck gateway diff kong.yaml \
-            --konnect-token ${{ secrets.DECK_KONNECT_TOKEN }} \
-            --konnect-control-plane-id ${{ secrets.DECK_KONNECT_CONTROL_PLANE_ID }}
+        run: deck gateway diff kong.yaml
 
       - name: Step 3 - Sync Configuration (Push to Konnect)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -56,7 +50,4 @@ jobs:
           DECK_KONNECT_ADDR: ${{ secrets.DECK_KONNECT_ADDR }}
           CONSUMER_API_KEY: ${{ secrets.CONSUMER_API_KEY }}
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-        run: |
-          deck gateway sync kong.yaml \
-            --konnect-token ${{ secrets.DECK_KONNECT_TOKEN }} \
-            --konnect-control-plane-id ${{ secrets.DECK_KONNECT_CONTROL_PLANE_ID }}
+        run: deck gateway sync kong.yaml
