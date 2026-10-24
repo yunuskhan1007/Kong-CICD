@@ -58,9 +58,51 @@ services:
     read_timeout: 60000
     write_timeout: 60000
     routes:
-      - name: payment-route-api
+      - name: payment-route-api-get
         paths:
           - /payment-get-api-1
+        strip_path: false
+    plugins:
+      - name: key-auth
+        enabled: true
+        config:
+          key_names:
+            - apikey
+          hide_credentials: true
+
+      - name: rate-limiting-advanced
+        enabled: true
+        config:
+          strategy: redis
+          identifier: consumer
+          limit:
+            - 3
+          window_size:
+            - 15
+          window_type: sliding
+          sync_rate: 0
+          namespace: YNqCE1hLkxlDNwUmPrJY3V1JVxhQ4hRM
+          redis:
+            host: redis.redis.svc.cluster.local
+            port: 6379
+            password: ${process_env.REDIS_PASSWORD}
+            database: 0
+            connect_timeout: 2000
+            read_timeout: 2000
+            send_timeout: 2000
+            keepalive_pool_size: 256
+            ssl: false
+
+  - name: payment-service-api-2
+    url: http://envoy-service.egress-system.svc.cluster.local:3128/payment-get-api-2
+    retries: 5
+    connect_timeout: 60000
+    read_timeout: 60000
+    write_timeout: 60000
+    routes:
+      - name: payment-route-api-get-2
+        paths:
+          - /payment-get-api-2
         strip_path: false
     plugins:
       - name: key-auth
