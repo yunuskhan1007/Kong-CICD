@@ -78,7 +78,7 @@ services:
           limit:
             - 3
           window_size:
-            - 15
+            - 20
           window_type: sliding
           sync_rate: 0
           namespace: YNqCE1hLkxlDNwUmPrJY3V1JVxhQ4hRM
