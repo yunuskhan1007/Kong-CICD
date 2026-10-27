@@ -44,8 +44,4 @@ jobs:
           DECK_KONNECT_ADDR: ${{ secrets.DECK_KONNECT_ADDR }}
           CONSUMER_API_KEY: ${{ secrets.CONSUMER_API_KEY }}
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-<<<<<<< HEAD
         run: deck gateway apply kong.yaml
-=======
-        run: deck gateway apply kong.yaml
->>>>>>> 278e90095d9039c81e3c16d45d8a1ed213ae473a
